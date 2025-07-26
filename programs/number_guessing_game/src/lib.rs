@@ -42,27 +42,31 @@ pub mod number_guessing_game {
     }
 
     pub fn join_game(ctx: Context<JoinGame>, game_id: u64) -> Result<()> {
-        let game = &mut ctx.accounts.game;
         let player = &ctx.accounts.player;
 
         // Check if game is initialized
-        require!(game.is_initialized, ErrorCode::GameNotInitialized);
+        require!(ctx.accounts.game.is_initialized, ErrorCode::GameNotInitialized);
         
         // Check if game is already settled or cancelled
-        require!(!game.game_settled, ErrorCode::GameAlreadySettled);
-        require!(!game.game_cancelled, ErrorCode::GameAlreadyCancelled);
+        require!(!ctx.accounts.game.game_settled, ErrorCode::GameAlreadySettled);
+        require!(!ctx.accounts.game.game_cancelled, ErrorCode::GameAlreadyCancelled);
+
+        // Store values we need before creating mutable borrow
+        let deposit_amount = ctx.accounts.game.deposit_amount;
+        let player_key = player.key();
+        let game_key = ctx.accounts.game.key();
 
         // Check if player is already in the game
-        if game.player_one == player.key() {
+        if ctx.accounts.game.player_one == player_key {
             // Player one is joining
-            require!(!game.player_one_deposited, ErrorCode::PlayerAlreadyJoined);
+            require!(!ctx.accounts.game.player_one_deposited, ErrorCode::PlayerAlreadyJoined);
             
             // Transfer deposit from player to game account
             invoke(
                 &system_instruction::transfer(
-                    player.key,
-                    &game.key(),
-                    game.deposit_amount,
+                    &player_key,
+                    &game_key,
+                    deposit_amount,
                 ),
                 &[
                     player.to_account_info(),
@@ -71,40 +75,43 @@ pub mod number_guessing_game {
                 ],
             )?;
             
+            // Now create mutable borrow after invoke
+            let game = &mut ctx.accounts.game;
             game.player_one_deposited = true;
-            game.total_pot += game.deposit_amount;
+            game.total_pot += deposit_amount;
             
-        } else if game.player_two.is_none() {
+        } else if ctx.accounts.game.player_two.is_none() {
+            // Transfer deposit from player to game account first
+            invoke(
+                &system_instruction::transfer(
+                    &player_key,
+                    &game_key,
+                    deposit_amount,
+                ),
+                &[
+                    player.to_account_info(),
+                    ctx.accounts.game.to_account_info(),
+                    ctx.accounts.system_program.to_account_info(),
+                ],
+            )?;
+            
+            // Now create mutable borrow after invoke
+            let game = &mut ctx.accounts.game;
             // New player joining as player two
-            game.player_two = Some(player.key());
-            
-            // Transfer deposit from player to game account
-            invoke(
-                &system_instruction::transfer(
-                    player.key,
-                    &game.key(),
-                    game.deposit_amount,
-                ),
-                &[
-                    player.to_account_info(),
-                    ctx.accounts.game.to_account_info(),
-                    ctx.accounts.system_program.to_account_info(),
-                ],
-            )?;
-            
+            game.player_two = Some(player_key);
             game.player_two_deposited = true;
-            game.total_pot += game.deposit_amount;
+            game.total_pot += deposit_amount;
             
-        } else if game.player_two == Some(player.key()) {
+        } else if ctx.accounts.game.player_two == Some(player_key) {
             // Player two is joining
-            require!(!game.player_two_deposited, ErrorCode::PlayerAlreadyJoined);
+            require!(!ctx.accounts.game.player_two_deposited, ErrorCode::PlayerAlreadyJoined);
             
             // Transfer deposit from player to game account
             invoke(
                 &system_instruction::transfer(
-                    player.key,
-                    &game.key(),
-                    game.deposit_amount,
+                    &player_key,
+                    &game_key,
+                    deposit_amount,
                 ),
                 &[
                     player.to_account_info(),
@@ -113,8 +120,10 @@ pub mod number_guessing_game {
                 ],
             )?;
             
+            // Now create mutable borrow after invoke
+            let game = &mut ctx.accounts.game;
             game.player_two_deposited = true;
-            game.total_pot += game.deposit_amount;
+            game.total_pot += deposit_amount;
             
         } else {
             // Game is full
