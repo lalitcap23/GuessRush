@@ -11,7 +11,7 @@ pub mod number_guessing_game {
         ctx: Context<InitializeGame>,
         _game_id: u64,
         deposit_amount: u64,
-        platform_fee_percent: u8,
+        platform_fee_percent: u8, 
     ) -> Result<()> {
         // Validate platform fee
         require!(

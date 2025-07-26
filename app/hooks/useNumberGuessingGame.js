@@ -6,8 +6,7 @@ import { IDL } from '../idl/number_guessing_game';
 
 // Constants
 const PROGRAM_ID = new PublicKey('Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS');
-const PLATFORM_WALLET = new PublicKey('YOUR_PLATFORM_WALLET_ADDRESS'); // Replace with your platform wallet
-
+const PLATFORM_WALLET = new PublicKey('455q3UD1KkfMP7zWrd2XcYoZW8LaVoiU969cmusengZ9'); 
 export const useNumberGuessingGame = () => {
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
