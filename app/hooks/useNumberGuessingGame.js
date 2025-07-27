@@ -4,8 +4,7 @@ import { AnchorProvider, Program, BN, web3 } from '@coral-xyz/anchor';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { IDL } from '../idl/number_guessing_game';
 
-// Constants
-const PROGRAM_ID = new PublicKey('Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS');
+const PROGRAM_ID = new PublicKey('73NgH4cvjbnCRiR2cP7RrTZnUzjwBERsPAb6AThEt8py');
 const PLATFORM_WALLET = new PublicKey('455q3UD1KkfMP7zWrd2XcYoZW8LaVoiU969cmusengZ9'); 
 export const useNumberGuessingGame = () => {
   const { connection } = useConnection();

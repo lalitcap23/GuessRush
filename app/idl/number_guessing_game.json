@@ -1,0 +1,490 @@
+{
+  "address": "73NgH4cvjbnCRiR2cP7RrTZnUzjwBERsPAb6AThEt8py",
+  "metadata": {
+    "name": "number_guessing_game",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "cancel_game",
+      "discriminator": [
+        121,
+        194,
+        154,
+        118,
+        103,
+        235,
+        149,
+        52
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "game",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator"
+        },
+        {
+          "name": "player_one",
+          "writable": true
+        },
+        {
+          "name": "player_two",
+          "writable": true,
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "_game_id",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_game",
+      "discriminator": [
+        44,
+        62,
+        102,
+        247,
+        126,
+        208,
+        130,
+        215
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform_wallet"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "_game_id",
+          "type": "u64"
+        },
+        {
+          "name": "deposit_amount",
+          "type": "u64"
+        },
+        {
+          "name": "platform_fee_percent",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "join_game",
+      "discriminator": [
+        107,
+        112,
+        18,
+        38,
+        56,
+        173,
+        60,
+        128
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "game_id",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "make_guess",
+      "discriminator": [
+        59,
+        189,
+        219,
+        87,
+        240,
+        211,
+        125,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "player",
+          "signer": true
+        },
+        {
+          "name": "game",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator"
+        }
+      ],
+      "args": [
+        {
+          "name": "_game_id",
+          "type": "u64"
+        },
+        {
+          "name": "guess",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "settle_game",
+      "discriminator": [
+        96,
+        54,
+        24,
+        189,
+        239,
+        198,
+        86,
+        29
+      ],
+      "accounts": [
+        {
+          "name": "settler",
+          "signer": true
+        },
+        {
+          "name": "game",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "game_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator"
+        },
+        {
+          "name": "player_one",
+          "writable": true
+        },
+        {
+          "name": "player_two",
+          "writable": true
+        },
+        {
+          "name": "platform_wallet",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "_game_id",
+          "type": "u64"
+        },
+        {
+          "name": "random_number",
+          "type": "u8"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "GameState",
+      "discriminator": [
+        144,
+        94,
+        208,
+        172,
+        248,
+        99,
+        134,
+        120
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "GameAlreadyInitialized",
+      "msg": "Game is already initialized"
+    },
+    {
+      "code": 6001,
+      "name": "GameNotInitialized",
+      "msg": "Game is not initialized"
+    },
+    {
+      "code": 6002,
+      "name": "PlayerAlreadyJoined",
+      "msg": "Player has already joined this game"
+    },
+    {
+      "code": 6003,
+      "name": "GameAlreadyFull",
+      "msg": "Game is already full with two players"
+    },
+    {
+      "code": 6004,
+      "name": "InsufficientDeposit",
+      "msg": "Deposit amount is insufficient"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidGuess",
+      "msg": "Guess must be between 1 and 10"
+    },
+    {
+      "code": 6006,
+      "name": "PlayerNotJoined",
+      "msg": "Player has not joined this game"
+    },
+    {
+      "code": 6007,
+      "name": "PlayerNotDeposited",
+      "msg": "Player has not deposited funds"
+    },
+    {
+      "code": 6008,
+      "name": "PlayerAlreadyGuessed",
+      "msg": "Player has already made a guess"
+    },
+    {
+      "code": 6009,
+      "name": "GameNotReady",
+      "msg": "Game is not ready to be settled"
+    },
+    {
+      "code": 6010,
+      "name": "GameAlreadySettled",
+      "msg": "Game has already been settled"
+    },
+    {
+      "code": 6011,
+      "name": "GameAlreadyCancelled",
+      "msg": "Game has already been cancelled"
+    },
+    {
+      "code": 6012,
+      "name": "UnauthorizedAction",
+      "msg": "Unauthorized action"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidPlatformFee",
+      "msg": "Platform fee must be between 0 and 100"
+    }
+  ],
+  "types": [
+    {
+      "name": "GameState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "is_initialized",
+            "type": "bool"
+          },
+          {
+            "name": "player_one",
+            "type": "pubkey"
+          },
+          {
+            "name": "player_two",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "player_one_deposited",
+            "type": "bool"
+          },
+          {
+            "name": "player_two_deposited",
+            "type": "bool"
+          },
+          {
+            "name": "player_one_guess",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "player_two_guess",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "random_number",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "winner",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "deposit_amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_pot",
+            "type": "u64"
+          },
+          {
+            "name": "platform_fee_percent",
+            "type": "u8"
+          },
+          {
+            "name": "platform_wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "game_settled",
+            "type": "bool"
+          },
+          {
+            "name": "game_cancelled",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ]
+}
